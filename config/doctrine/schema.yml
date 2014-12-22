@@ -1,0 +1,75 @@
+BetyoloCategory:
+  actAs: { Timestampable: ~ }
+  columns:
+    name: { type: string(255), notnull: true, unique: true }
+    description:  { type: string(4000), notnull: true }
+
+
+BetyoloSide:
+  actAs: { Timestampable: ~ }
+  columns:
+    name: { type: string(255), notnull: true, unique: true }
+    description:  { type: string(4000), notnull: true }
+    category_id:  { type: integer, notnull: true }
+  relations:
+    BetyoloCategory: { onDelete: CASCADE, local: category_id, foreign: id, foreignAlias: BetyoloSide }
+
+
+BetyoloBet:
+  actAs: { Timestampable: ~ }
+  columns:
+    creator_id: { type: integer }
+    description:  { type: string(4000), notnull: true }
+    side_a_id: { type: integer, notnull: true }
+    side_b_id: { type: integer, notnull: true }
+    category_id:  { type: integer, notnull: true }
+    status:  { type: integer }
+    result:  { type: integer }
+    start_dt: { type:datetime, notnull: true}
+    end_dt: { type:datetime, notnull: true }
+  relations:
+    BetyoloCategory: { onDelete: CASCADE, local: category_id, foreign: id, foreignAlias: BetyoloBet }
+    SideA:
+      class: BetyoloSide
+      local: side_a_id
+      foreign: id
+      onDelete: CASCADE
+    SideB:
+      class: BetyoloSide
+      local: side_b_id
+      foreign: id
+      onDelete: CASCADE
+    sfGuardUser:
+      class: sfGuardUser
+      local: creator_id
+      foreign: id
+      onDelete: CASCADE
+
+Transaction:
+  actAs: { Timestampable: ~ }
+  columns:
+    user_id: {type: integer, notnull: true}
+    type: {type: integer, notnull: true}
+    amount: {type: integer, notnull: true}
+    status: {type: integer, notnull: true}
+    created_at: {type: timestamp, notnull: true}
+  relations:
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreignAlias: Transactions
+      onDelete: CASCADE
+
+UserProfile:
+  actAs: { Timestampable: ~ }
+  columns:
+    id: { type: integer, primary: true, autoincrement: true }
+    sf_guard_user_id: { type:integer }
+    hcoin: { type:integer, default: 0 }
+  relations:
+    User:
+      class: sfGuardUser
+      foreignType: one
+      foreignAlias: Profile
+      local: sf_guard_user_id
+      onDelete: CASCADE

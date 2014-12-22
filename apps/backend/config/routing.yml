@@ -1,0 +1,56 @@
+betyolo_bet:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                BetyoloBet
+    module:               bet
+    prefix_path:          /bet
+    column:               id
+    with_wildcard_routes: true
+betyolo_side:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                BetyoloSide
+    module:               betyolo_side
+    prefix_path:          /betyolo_side
+    column:               id
+    with_wildcard_routes: true
+
+betyolo_category:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                BetyoloCategory
+    module:               betyolo_category
+    prefix_path:          /betyolo_category
+
+transaction:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                Transaction
+    module:               transaction
+    prefix_path:          /transaction
+    column:               id
+    with_wildcard_routes: true
+
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+# default rules
+homepage:
+  url:   /
+  param: { module: default, action: index }
+
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*
+
+confirm_transaction:
+  url: /transaction/confirm/:id/:type
+  param: {module: transaction, action: confirm}
+cancel_transaction:
+  url: /transaction/cancel/:id/:type
+  param: {module: transaction, action: cancel}
